@@ -1,6 +1,7 @@
 frontend/node_modules/node/bin/node.exe filter=lfs diff=lfs merge=lfs -text
-echo "node_modules/" >> .gitignore
 git rm -r --cached node_modules
 git add .gitignore
 git commit -m "Updated .gitignore to ignore node_modules"
 node_modules/
+echo "node_modules/" >> .gitignore
+echo "frontend/node_modules/.cache/" >> .gitignore
