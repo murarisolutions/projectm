@@ -5,3 +5,5 @@ git commit -m "Updated .gitignore to ignore node_modules"
 node_modules/
 echo "node_modules/" >> .gitignore
 echo "frontend/node_modules/.cache/" >> .gitignore
+node_modules/
+frontend/node_modules/.cache/
