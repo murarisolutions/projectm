@@ -1,8 +1,15 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { FaVideo, FaUpload, FaClipboardCheck } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 import "../DscUp/dscup.css";
 
 const VideoVerificationSteps = () => {
+  const navigate = useNavigate();
+
+  const handleGoBack = useCallback(() => {
+    navigate("/dsc");
+  }, [navigate]);
+
   return (
     <div className="verification-container">
       <h1>How to Do DSC Video Verification</h1>
@@ -25,7 +32,7 @@ const VideoVerificationSteps = () => {
       </div>
 
       <div className="step-box">
-        <h2><FaUpload className="step-icon" /> Step 3: Submit Your Video</h2>
+        <h2><FaUpload className="step-icon" /> Step 3: Upload Your Video</h2>
         <ul>
           <li>Click <strong>"Upload Video" OR "Submit Video"</strong>.</li>
           <li>Wait for <strong>successful upload confirmation</strong>.</li>
@@ -45,6 +52,10 @@ const VideoVerificationSteps = () => {
       >
         Start Video Verification
       </button>
+
+      <div className="advisor">
+        <button onClick={handleGoBack} className="back-btn">Go Back</button>
+      </div>
     </div>
   );
 };
