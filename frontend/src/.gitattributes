@@ -2,3 +2,7 @@
 /.yarn/releases/*    binary
 /.yarn/plugins/**/*  binary
 /.pnp.*              binary linguist-generated
+git add .gitattributes
+git commit -m "Track large files with Git LFS"
+nano frontend/src/.gitattributesy
+
