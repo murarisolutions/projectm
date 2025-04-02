@@ -3,3 +3,12 @@ node_modules/
 *.exe
 node_modules/
 .cache/
+node_modules/
+.cache/
+*.exe
+*.mp4
+*.zip
+*.pdf
+*.psd
+*.pack_
+
