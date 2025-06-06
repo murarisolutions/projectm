@@ -1,0 +1,76 @@
+name: MERN CI/CD Pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build-and-test:
+    name: 🔧 Build & Test (server + client)
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [16.x, 18.x]
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm  # caches dependencies
+
+      - name: 🧪 Install & test server
+        working-directory: ./server
+        run: |
+          npm ci
+          npm run lint
+          npm test
+
+      - name: 🧪 Install, test & build client
+        working-directory: ./client
+        run: |
+          npm ci
+          npm run lint
+          npm test
+          npm run build
+
+      - name: 📦 Copy build to server public folder
+        run: |
+          cp -r client/build server/public/
+
+      - name: 📦 Upload artifact (server + public)
+        uses: actions/upload-artifact@v3
+        with:
+          name: mern-server
+          path: server
+
+  deploy:
+    name: 🚀 Deploy to Remote Server
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: mern-server
+          path: server
+
+      - name: Setup SSH key
+        run: |
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > key.pem
+          chmod 600 key.pem
+
+      - name: Deploy via rsync + SSH
+        run: |
+          rsync -avz -e "ssh -o StrictHostKeyChecking=no -i key.pem" server/ user@YOUR_SERVER_IP:/path/to/app/
+
+      - name: Restart service
+        run: |
+          ssh -o StrictHostKeyChecking=no -i key.pem user@YOUR_SERVER_IP "cd /path/to/app && pm2 restart all || pm2 start server.js"
