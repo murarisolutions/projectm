@@ -14,14 +14,6 @@ app.use(bodyParser.json());
 
 
 
-mongoose.connect('mongodb+srv://murarivenu45:venu45@cluster0.zkdaprx.mongodb.net/Mtest?retryWrites=true&w=majority&appName=Cluster0', { 
-  useNewUrlParser: true, 
-  useUnifiedTopology: true 
-})
-.then(() => console.log('Connected to MongoDB'))
-.catch((error) => console.error('MongoDB connection error:', error));
-
-
 const UserSchema = new mongoose.Schema({
   id: Number,
   name: String,
